@@ -4,24 +4,22 @@
       <RankTable
         title="积分排行"
         :data="pointsRanking"
-        value-key="score"
-        value-label="积分"
+        :columns="pointsColumns"
       />
-      
+  
       <!-- 使用天数排行 -->
       <RankTable
         title="使用天数排行"
         :data="usageRanking"
-        value-key="days"
-        value-label="天数"
+        :columns="usageColumns"
       />
-      
+  
       <!-- 等级比例 -->
       <RankTable
         title="等级比例"
         :data="levelRanking"
         type="progress"
-        value-label="比例"
+        :columns="levelColumns"
       />
     </div>
   </template>
@@ -30,7 +28,6 @@
   import { ref, onMounted } from 'vue'
   import RankTable from './RankTable.vue'
   
-  /* ---------------- 类型定义 ---------------- */
   interface RankBase {
     rank: number
     name: string
@@ -49,13 +46,32 @@
     percent: number
   }
   
-  /* ---------------- loading ---------------- */
   const loading = ref(true)
-  
-  /* ---------------- 数据 ---------------- */
   const pointsRanking = ref<PointsRank[]>([])
   const usageRanking = ref<UsageRank[]>([])
   const levelRanking = ref<LevelRank[]>([])
+  
+  /* ---------------- 列配置 ---------------- */
+  const pointsColumns = [
+    { label: '排名', key: 'rank', width: '40px' ,core: true},
+    { label: '姓名', key: 'name' ,core: true},
+    { label: '部门', key: 'department' },
+    { label: '积分', key: 'score', width: '80px', class: 'right',core: true }
+  ]
+  
+  const usageColumns = [
+    { label: '排名', key: 'rank', width: '40px',core: true },
+    { label: '姓名', key: 'name' ,core: true},
+    { label: '部门', key: 'department' },
+    { label: '天数', key: 'days', width: '80px', class: 'right' ,core: true}
+  ]
+  
+  const levelColumns = [
+    { label: '排名', key: 'rank', width: '40px',core: true },
+    { label: '姓名', key: 'name' ,core: true},
+    { label: '部门', key: 'department' },
+    { label: '比例', key: 'percent', width: '80px', class: 'right' ,core: true}
+  ]
   
   /* ---------------- 模拟接口 ---------------- */
   function fetchHonorRanking(): Promise<PointsRank[]> {
@@ -73,7 +89,7 @@
           { rank: 9, name: 'Xue Yunfan', department: 'PaaS 平台部', score: 100 },
           { rank: 10, name: '张若虚', department: '第三方付', score: 98 }
         ])
-      }, 1200)
+      }, 0)
     })
   }
   
@@ -108,3 +124,4 @@
     gap: 16px;
   }
   </style>
+  
