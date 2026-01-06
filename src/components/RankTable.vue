@@ -1,197 +1,163 @@
 <template>
-  <div class="rank-card">
-    <div class="rank-header">{{ title }}</div>
-
-    <div class="rank-table">
-      <!-- 表头 -->
-      <div class="rank-row header">
-        <div
-          v-for="col in visibleColumns"
-          :key="col.key"
-          :class="['col', col.class || '', col.core ? 'core' : '']"
-          :style="{ width: col.width || 'auto' }"
-        >
-          {{ col.label }}
-        </div>
-      </div>
-
-      <!-- 表体 -->
-      <div
-        v-for="item in data"
-        :key="item.rank"
-        class="rank-row"
+    <div class="rank-card">
+      <div class="rank-header">{{ title }}</div>
+  
+      <el-table
+        :data="data"
+        show-overflow-tooltip
+        style="width: 100%"
+        :header-cell-class-name="headerCellClass"
+        :cell-class-name="cellClass"
       >
-        <div
-          v-for="col in visibleColumns"
+        <el-table-column
+          v-for="col in columns"
           :key="col.key"
-          :class="['col', col.class || '', col.core ? 'core' : '']"
-          :style="{ width: col.width || 'auto' }"
+          :prop="col.key"
+          :label="col.label"
+          :width="col.width || ''"
         >
-          <!-- 特殊处理：排名前三显示奖牌 -->
-          <template v-if="col.key === 'rank'">
-            <img
-              v-if="item.rank <= 3"
-              :src="rankIcons[item.rank]"
-              class="rank-icon"
-            />
-            <span v-else>{{ item.rank }}</span>
+          <template v-slot="scope">
+            <!-- 排名列奖牌 -->
+            <template v-if="col.key === 'rank'">
+              <img
+                v-if="scope.row.rank <= 3"
+                :src="rankIcons[scope.row.rank]"
+                class="rank-icon"
+              />
+              <span v-else>{{ scope.row.rank }}</span>
+            </template>
+  
+            <!-- 百分比列 -->
+            <template v-else-if="col.key === 'percent' && type === 'progress'">
+              {{ formatPercent(scope.row) }}
+            </template>
+  
+            <!-- 默认显示 -->
+            <template v-else>
+              {{ scope.row[col.key] }}
+            </template>
           </template>
-
-          <!-- 特殊处理：百分比显示 -->
-          <template v-else-if="col.key === 'percent' && type === 'progress'">
-            {{ formatPercent(item) }}
-          </template>
-
-          <!-- 默认显示对应字段值 -->
-          <template v-else>
-            {{ item[col.key] }}
-          </template>
-        </div>
-      </div>
+        </el-table-column>
+      </el-table>
     </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-interface RankBase {
-  rank: number
-  name: string
-  department: string
-  percent?: number
-  [key: string]: any
-}
-
-interface Column {
-  label: string
-  key: string
-  width?: string
-  class?: string
-  core?: boolean
-}
-
-interface Props {
-  title: string
-  data: RankBase[]
-  type?: 'default' | 'progress'
-  columns: Column[]
-}
-
-const props = defineProps<Props>()
-
-// 奖牌图标
-const rankIcons: Record<number, string> = {
-  1: 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png',
-  2: 'https://cdn-icons-png.flaticon.com/512/2583/2583319.png',
-  3: 'https://cdn-icons-png.flaticon.com/512/2583/2583434.png'
-}
-
-// 格式化百分比显示
-const formatPercent = (item: RankBase) => `${item.percent || 0}%`
-
-/**
- * 自适应显示列
- */
-const visibleColumns = ref<Column[]>(props.columns)
-
-const updateColumns = () => {
-  const containerWidth = document.querySelector('.rank-card')?.clientWidth || 0
-  let availableWidth = containerWidth - 60 // 排名列固定宽60px
-  const newVisible: Column[] = []
-
-  for (const col of props.columns) {
-    if (col.key === 'rank' || col.core) {
-      newVisible.push(col)
-      continue
-    }
-
-    const colWidth = col.width ? parseInt(col.width) : 80
-    if (availableWidth - colWidth >= 0) {
-      newVisible.push(col)
-      availableWidth -= colWidth
-    } else {
-      break
-    }
+  </template>
+  
+  <script setup lang="ts">
+  import { computed } from 'vue'
+  
+  interface RankBase {
+    rank: number
+    name: string
+    department: string
+    percent?: number
+    [key: string]: any
   }
-
-  visibleColumns.value = newVisible
-}
-
-onMounted(() => {
-  updateColumns()
-  window.addEventListener('resize', updateColumns)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateColumns)
-})
-</script>
-
-<style scoped lang="scss">
-.rank-card {
-  flex: 1;
-  background: #fff;
-  border-radius: 6px;
-  padding: 12px;
-
-  .rank-header {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    padding-left: 8px;
-    text-align: center;
+  
+  interface Column {
+    label: string
+    key: string
+    width?: string
+    class?: string
+    core?: boolean
   }
-
-  .rank-table {
-    border: 1px solid #ebeef5;
-    border-radius: 4px;
-    overflow: hidden;
-
-    .rank-row {
-      display: grid;
-      grid-template-columns: 60px repeat(auto-fit, minmax(60px, 1fr));
-      align-items: center;
-      height: 46px;
-      font-size: 12px;
-      border-bottom: 1px solid #f5f5f5;
-      transition: background 0.3s;
-
-      &.header {
+  
+  interface Props {
+    title: string
+    data: RankBase[]
+    type?: 'default' | 'progress'
+    columns: Column[]
+  }
+  
+  const props = defineProps<Props>()
+  
+  // 给排名列增加宽度
+  const columns = computed(() =>
+    props.columns.map(col => {
+      if (col.key === 'rank') return { ...col, width: '80px' }
+      return col
+    })
+  )
+  
+  const rankIcons: Record<number, string> = {
+    1: 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png',
+    2: 'https://cdn-icons-png.flaticon.com/512/2583/2583319.png',
+    3: 'https://cdn-icons-png.flaticon.com/512/2583/2583434.png'
+  }
+  
+  const formatPercent = (item: RankBase) => `${item.percent || 0}%`
+  
+  // 表头样式
+  const headerCellClass = ({ column }: any) => {
+    if (column.property === 'rank') return 'rank-header-cell'
+    return ''
+  }
+  
+  // 单元格样式
+  const cellClass = ({ column }: any) => {
+    if (column.property === 'rank') return 'rank-cell'
+    return 'ellipsis-cell'
+  }
+  </script>
+  
+  <style scoped lang="scss">
+  .rank-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 6px;
+    padding: 12px;
+  
+    .rank-header {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+  
+    /* 全局覆盖表格内部样式 */
+    ::v-deep(.el-table) {
+      border: 1px solid #ebeef5;
+      border-radius: 4px;
+  
+      .el-table__header-wrapper {
         background: #f5f7fa;
         font-weight: 600;
         color: #666;
       }
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &:hover {
-        background-color: #f0f4ff;
-      }
-
-      .col {
-        padding: 0 8px;
-        white-space: nowrap;      /* 不换行 */
-        overflow: hidden;         /* 超出隐藏 */
-        text-overflow: ellipsis;  /* 显示省略号 */
-
-        &.right {
-          text-align: right;
+  
+      .el-table__row {
+        height: 46px;
+        font-size: 12px;
+        transition: background 0.3s;
+  
+        &:hover {
+          background-color: #f0f4ff;
         }
-
-        /* 居中排名列 */
-        &:first-child {
-          text-align: center;
-        }
-
+      }
+  
+      /* 排名列表头 */
+      .rank-header-cell {
+        text-align: center !important;
+      }
+  
+      /* 排名列单元格 */
+      .rank-cell {
+        text-align: center !important;
+  
         .rank-icon {
-          width: 30px;
-          height: 30px;
+          width: 30px !important;
+          height: 30px !important;
+          display: inline-block;
+          vertical-align: middle;
         }
+      }
+  
+      /* 其他列文本超出省略 */
+      .ellipsis-cell {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
       }
     }
   }
-}
-</style>
+  </style>
+  
