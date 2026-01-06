@@ -53,22 +53,22 @@
   
   /* ---------------- 列配置 ---------------- */
   const pointsColumns = [
-    { label: '排名', key: 'rank', width: '40px' ,core: true},
-    { label: '姓名', key: 'name' ,core: true},
+    { label: '排名', key: 'rank', width: '70px' ,core: true},
+    { label: '姓名', key: 'name' , width: '110px',core: true},
     { label: '部门', key: 'department' },
     { label: '积分', key: 'score', width: '80px', class: 'right',core: true }
   ]
   
   const usageColumns = [
-    { label: '排名', key: 'rank', width: '40px',core: true },
-    { label: '姓名', key: 'name' ,core: true},
+    { label: '排名', key: 'rank', width: '70px',core: true },
+    { label: '姓名', key: 'name' ,width: '110px',core: true},
     { label: '部门', key: 'department' },
     { label: '天数', key: 'days', width: '80px', class: 'right' ,core: true}
   ]
   
   const levelColumns = [
-    { label: '排名', key: 'rank', width: '40px',core: true },
-    { label: '姓名', key: 'name' ,core: true},
+    { label: '排名', key: 'rank', width: '70px',core: true },
+    { label: '姓名', key: 'name' ,width: '110px',core: true},
     { label: '部门', key: 'department' },
     { label: '比例', key: 'percent', width: '80px', class: 'right' ,core: true}
   ]

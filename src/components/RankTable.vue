@@ -71,12 +71,7 @@
   const props = defineProps<Props>()
   
   // 给排名列增加宽度
-  const columns = computed(() =>
-    props.columns.map(col => {
-      if (col.key === 'rank') return { ...col, width: '80px' }
-      return col
-    })
-  )
+  const columns = props.columns
   
   const rankIcons: Record<number, string> = {
     1: 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png',
