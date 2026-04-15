@@ -1,0 +1,384 @@
+/* CommentList.scss */
+
+.bili-comments {
+    width: 760px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  
+  .comment-list {
+    width: 100%;
+  }
+  
+  .comment-item {
+    padding: 18px 0;
+    border-bottom: 1px solid #e5e9ef;
+  }
+  
+  .comment-main {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #c0ccda;
+    flex-shrink: 0;
+  }
+  
+  .comment-content-wrap {
+    flex: 1;
+  }
+  
+  .comment-username {
+    color: #fb7299;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  
+  .comment-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    margin: 6px 0 8px 0;
+    word-break: break-word;
+  }
+  
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: #99a2aa;
+  }
+  
+  .comment-time {
+    color: #99a2aa;
+  }
+  
+  .comment-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+  
+    &:hover {
+      color: #00a1d6;
+    }
+  }
+  
+  .like-action {
+    &:hover {
+      color: #fb7299;
+    }
+    
+    &.liked {
+      color: #fb7299;
+      
+      &:hover {
+        color: #fb7299;
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  .reply-action {
+    &:hover {
+      color: #00a1d6;
+    }
+  }
+  
+  // 子回复区域
+  .sub-reply-area {
+    margin-left: 52px;
+    margin-top: 12px;
+    background-color: #f6f7f8;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  
+  // 子回复项 - 添加头像后的布局
+  .sub-reply-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  // 子回复头像
+  .sub-reply-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #c0ccda;
+    flex-shrink: 0;
+  }
+  
+  // 子回复内容包裹层
+  .sub-reply-content-wrap {
+    flex: 1;
+  }
+  
+  .sub-reply-content {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #222;
+  }
+  
+  .sub-reply-name {
+    color: #61666d;
+    font-weight: 500;
+  }
+  
+  .sub-reply-at {
+    color: #99a2aa;
+    font-size: 12px;
+    margin: 0 2px;
+  }
+  
+  .sub-reply-target {
+    color: #fb7299;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  
+  .sub-reply-text {
+    color: #222;
+  }
+  
+  .sub-reply-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #99a2aa;
+  }
+  
+  .sub-reply-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+  
+    &:hover {
+      color: #fb7299;
+    }
+    
+    &.liked {
+      color: #fb7299;
+      
+      &:hover {
+        color: #fb7299;
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  .sub-reply-btn {
+    cursor: pointer;
+    transition: color 0.2s;
+  
+    &:hover {
+      color: #00a1d6;
+    }
+  }
+  
+  .view-more-reply {
+    font-size: 12px;
+    color: #00a1d6;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+    margin-left: 42px; // 与回复内容对齐（头像宽度32px + 间距10px）
+  
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  
+  .full-replies {
+    margin-top: 8px;
+  }
+  
+  .reply-pagination {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0 8px 0;
+  }
+  
+  .collapse-replies {
+    font-size: 12px;
+    color: #99a2aa;
+    cursor: pointer;
+    margin-top: 8px;
+    text-align: left;
+    margin-left: 42px; // 与回复内容对齐
+  
+    &:hover {
+      color: #00a1d6;
+    }
+  }
+  
+  .reply-input-area {
+    margin-left: 52px;
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    transition: all 0.3s ease;
+    
+    &.highlight {
+      animation: highlightFlash 0.5s ease-in-out;
+    }
+  }
+  
+  @keyframes highlightFlash {
+    0% {
+      background-color: transparent;
+    }
+    50% {
+      background-color: rgba(251, 114, 153, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin: -12px 0 -12px -12px;
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  
+  .reply-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #c0ccda;
+    flex-shrink: 0;
+  
+    &.small {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  
+  .reply-input-wrap {
+    flex: 1;
+  }
+  
+  .reply-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .comment-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    padding: 20px 0 40px 0;
+  }
+  
+  // Element Plus 分页组件样式覆盖
+  :deep(.el-pagination) {
+    --el-pagination-font-size: 14px;
+    --el-pagination-button-width: 32px;
+    --el-pagination-button-height: 32px;
+    
+    .btn-prev,
+    .btn-next {
+      background: transparent !important;
+      border: none !important;
+      color: #61666d !important;
+      font-size: 14px !important;
+      min-width: auto !important;
+      padding: 0 8px !important;
+      
+      &:hover {
+        color: #00a1d6 !important;
+        background: transparent !important;
+      }
+      
+      &:disabled {
+        color: #c0ccda !important;
+        cursor: not-allowed;
+      }
+    }
+    
+    .el-pager {
+      li {
+        background: transparent !important;
+        border: none !important;
+        color: #61666d !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        min-width: 32px !important;
+        height: 32px !important;
+        line-height: 32px !important;
+        margin: 0 2px !important;
+        border-radius: 4px !important;
+        
+        &:hover {
+          color: #00a1d6 !important;
+          background: transparent !important;
+        }
+        
+        &.is-active {
+          color: #00a1d6 !important;
+          background: transparent !important;
+          font-weight: 500 !important;
+          position: relative;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background-color: #00a1d6;
+            border-radius: 1px;
+          }
+        }
+      }
+    }
+  }
+  
+  :deep(.reply-pagination .el-pagination) {
+    .btn-prev,
+    .btn-next {
+      font-size: 12px !important;
+      padding: 0 6px !important;
+    }
+    
+    .el-pager li {
+      font-size: 12px !important;
+      min-width: 28px !important;
+      height: 28px !important;
+      line-height: 28px !important;
+      
+      &.is-active::after {
+        width: 16px;
+      }
+    }
+  }
+  
+  :deep(.el-textarea__inner) {
+    border-radius: 4px;
+    border-color: #e5e9ef;
+    font-size: 13px;
+  
+    &:focus {
+      border-color: #00a1d6;
+      box-shadow: 0 0 0 2px rgba(0, 161, 214, 0.1);
+    }
+  }
